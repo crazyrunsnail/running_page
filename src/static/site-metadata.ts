@@ -12,7 +12,7 @@ interface ISiteMetadataResult {
 const data: ISiteMetadataResult = {
   siteTitle: 'Fake David\'s Running Page',
   siteUrl: 'https://running-page-eight-pied.vercel.app',
-  logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTtc69JxHNcmN1ETpMUX4dozAgAN6iPjWalQ&usqp=CAU',
+  logo: 'https://pub-2f3658b6a0e8409ba95b42bd0c7b8d81.r2.dev/a%20Aisan%20running%20man%20that%20wears%20a%20watch%20in%20a%20sunrise.jpg',
   description: 'Person running page',
   navLinks: [
     {
