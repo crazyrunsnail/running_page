@@ -9,9 +9,9 @@ import os
 import sys
 
 
-from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE, config
+from config import FIT_FOLDER, GPX_FOLDER, JSON_FILE, SQL_FILE
 from garmin_sync import Garmin, get_downloaded_ids
-from garmin_sync import download_new_activities, gather_with_concurrency
+from garmin_sync import download_new_activities
 from utils import make_activities_file
 
 if __name__ == "__main__":
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         )
     )
     loop.run_until_complete(future)
-    new_ids = future.result()
+    new_ids, id2title = future.result()
 
     to_upload_files = []
     for i in new_ids:
@@ -76,9 +76,10 @@ if __name__ == "__main__":
             to_upload_files.append(os.path.join(GPX_FOLDER, f"{i}.gpx"))
 
     print("Files to sync:" + " ".join(to_upload_files))
+    # FIXME is com ok here?
     garmin_global_client = Garmin(
         secret_string_global,
-        config("sync", "garmin", "authentication_domain"),
+        "COM",
         is_only_running,
     )
     loop = asyncio.get_event_loop()
@@ -89,5 +90,9 @@ if __name__ == "__main__":
 
     # Step 2:
     # Generate track from fit/gpx file
-    make_activities_file(SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx")
-    make_activities_file(SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit")
+    make_activities_file(
+        SQL_FILE, GPX_FOLDER, JSON_FILE, file_suffix="gpx", activity_title_dict=id2title
+    )
+    make_activities_file(
+        SQL_FILE, FIT_FOLDER, JSON_FILE, file_suffix="fit", activity_title_dict=id2title
+    )
